@@ -1,5 +1,8 @@
-package hdfs;
+package com.bigdata.hdfs;
 
+import com.bigdata.constants.Constants;
+import com.bigdata.utils.ParamsUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.junit.Before;
@@ -8,6 +11,7 @@ import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -21,12 +25,19 @@ import java.util.Set;
 public class HDFSApp {
     public static void main(String[] args) throws Exception {
 
-        // 1. 通过HDFS API 将文件读入 拿到文件
-        Path path = new Path("/hadoopapi/test/word.txt");
+        Properties properties = ParamsUtils.getProperties();
 
-        FileSystem fileSystem = FileSystem.get(new URI("hdfs://192.168.0.6:8020"), new Configuration(), "root");
+
+        // 1. 通过HDFS API 将文件读入 拿到文件
+        Path path = new Path(properties.getProperty(Constants.INPUT_READ));
+
+        FileSystem fileSystem = FileSystem.get(new URI(properties.getProperty(Constants.HDFS_URI)), new Configuration(), "root");
         IContext context = new IContext();
-        IMapper mapper = new IMapperImpl();
+
+        // 反射获取
+        Class<?> clazz = Class.forName(properties.getProperty(Constants.IMAPPER_CLASS));
+        IMapper mapper = (IMapper) clazz.newInstance();
+
         // 拿到文件
         RemoteIterator<LocatedFileStatus> locatedFileStatusRemoteIterator = fileSystem.listFiles(path, false);
         while (locatedFileStatusRemoteIterator.hasNext())
@@ -50,7 +61,7 @@ public class HDFSApp {
 
         // 输出结果文件
         // 调用HDFS API
-        Path outPath = new Path("/hadoopapi/output/wc.txt");
+        Path outPath = new Path(properties.getProperty(Constants.OUTPUT_FILE));
         FSDataOutputStream fsDataOutputStream = fileSystem.create(outPath);
 
 

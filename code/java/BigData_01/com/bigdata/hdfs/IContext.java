@@ -1,4 +1,4 @@
-package hdfs;
+package com.bigdata.hdfs;
 
 import java.util.HashMap;
 import java.util.Map;

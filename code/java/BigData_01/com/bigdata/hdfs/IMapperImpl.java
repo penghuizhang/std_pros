@@ -1,5 +1,4 @@
-package hdfs;
-
+package com.bigdata.hdfs;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Collections;

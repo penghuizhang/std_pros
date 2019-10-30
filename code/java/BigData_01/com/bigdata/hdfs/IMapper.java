@@ -1,4 +1,4 @@
-package hdfs;
+package com.bigdata.hdfs;
 
 /**
  * Description: BigData_01
