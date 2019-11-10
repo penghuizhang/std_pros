@@ -31,6 +31,12 @@ public class AccessLocalApp {
         Job job = Job.getInstance(configuration);
         job.setJarByClass(AccessLocalApp.class);
 
+        // 设置分区规则
+        job.setPartitionerClass(AccessPartitioner.class);
+
+        // 设置reducer个数
+        job.setNumReduceTasks(3);
+
         job.setMapperClass(AccessMapper.class);
         job.setReducerClass(AccessReducer.class);
 
