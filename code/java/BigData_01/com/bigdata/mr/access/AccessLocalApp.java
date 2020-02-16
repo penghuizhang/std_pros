@@ -18,15 +18,6 @@ public class AccessLocalApp {
     public static void main(String[] args) throws Exception {
 
         Configuration configuration = new Configuration();
-        configuration.set("fs.defaultFS","hdfs://localhost:9000/");
-        configuration.set("fs.default.name","hdfs://localhost:9000/");
-
-        System.setProperty("hadoop.home.dir","D:\\BaiduNetdiskDownload\\hadoop\\hadoop-2.6.0-cdh5.15.1\\hadoop-2.6.0-cdh5.15.1");
-        configuration.set("mapreduce.job.jar", "E:\\code\\std_pros\\code\\java\\BigData_01\\target\\hadoop-train-v2-1.0.jar");
-        configuration.set("mapreduce.app-submission.cross-platform","true");
-        //快捷配置(一步到位)：引入HADOOP配置资源:属性名相同则替换:注意域名和IP配置问题
-        configuration.addResource(new Path("core-site.xml"));
-        configuration.addResource(new Path("hdfs-site.xml"));
 
         Job job = Job.getInstance(configuration);
         job.setJarByClass(AccessLocalApp.class);
@@ -46,8 +37,8 @@ public class AccessLocalApp {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Access.class);
 
-        FileInputFormat.setInputPaths(job, new Path("/user/hadoop/access/input"));
-        FileOutputFormat.setOutputPath(job, new Path("/user/hadoop/access/output"));
+        FileInputFormat.setInputPaths(job, new Path("hdfs://localhost:9000/access/input"));
+        FileOutputFormat.setOutputPath(job, new Path("hdfs://localhost:9000/access/output"));
 
         job.waitForCompletion(true);
 
